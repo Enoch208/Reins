@@ -1,0 +1,1 @@
+ALTER TABLE "authorizations" ADD COLUMN "resolution_reason" text;
