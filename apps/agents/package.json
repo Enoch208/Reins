@@ -1,0 +1,16 @@
+{
+  "name": "@reins/agents",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --env-file-if-exists=.env src/main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
+  },
+  "dependencies": {
+    "@reins/core": "workspace:*",
+    "zod": "4.6.5"
+  }
+}

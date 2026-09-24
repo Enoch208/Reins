@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: reins
+      POSTGRES_PASSWORD: reins
+      POSTGRES_DB: reins
+    ports:
+      - "54320:5432"
+    volumes:
+      - reins-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reins -d reins"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  reins-postgres:
