@@ -19,7 +19,7 @@ function purchaseJobBody(): CreateJobBody {
   };
 }
 
-async function requireFundedWallet(context: SceneContext): Promise<void> {
+export async function requireFundedWallet(context: SceneContext): Promise<void> {
   const wallet = await context.client.wallet();
   context.say(
     `payer wallet ${wallet.status}, ${wallet.address ?? "no address"}, ${wallet.balance ?? "?"} ${wallet.asset}`,
@@ -35,7 +35,7 @@ async function requireFundedWallet(context: SceneContext): Promise<void> {
   }
 }
 
-async function requireService(context: SceneContext, serviceUrl: string): Promise<void> {
+export async function requireService(context: SceneContext, serviceUrl: string): Promise<void> {
   const response = await fetch(new URL("/health", serviceUrl)).catch((error: unknown) => {
     throw new SceneAbort(`paid service unreachable at ${serviceUrl}: ${String(error)}`);
   });

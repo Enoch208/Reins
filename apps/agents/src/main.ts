@@ -3,10 +3,11 @@ import { EnvError, loadEnv, type Env } from "./env";
 import { runScene, writeSummary, type SceneResult } from "./runner";
 import { scenes } from "./scenes";
 import { purchaseScene } from "./scenes/purchase";
+import { raceScene } from "./scenes/race";
 import { stdoutWriter } from "./transcript";
 
-const paidPurchase = purchaseScene(process.env.PAID_SERVICE_URL ?? null);
-const runnable = [...scenes, paidPurchase];
+const paidServiceUrl = process.env.PAID_SERVICE_URL ?? null;
+const runnable = [...scenes, purchaseScene(paidServiceUrl), raceScene(paidServiceUrl)];
 
 function usage(): string {
   const width = Math.max(...runnable.map((scene) => scene.name.length), "all".length);
@@ -19,7 +20,7 @@ function usage(): string {
     "",
     "Scenes:",
     ...lines,
-    `  ${"all".padEnd(width)}  every scene except purchase, then a summary table`,
+    `  ${"all".padEnd(width)}  every scene except purchase and race, then a summary table`,
     "",
     "Environment: REINS_API_URL     base URL of the Reins API, e.g. http://localhost:8787",
     "             PAID_SERVICE_URL  base URL of the paid service, needed only for purchase",
