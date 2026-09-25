@@ -6,6 +6,7 @@ import { cx } from "@/lib/cx";
 import { appRoutes } from "@/lib/routes";
 import { consoleNav } from "./console-nav";
 import { SidebarLink } from "./sidebar-link";
+import { OperatorAccess } from "./operator-access";
 import { SidebarWallet } from "./sidebar-wallet";
 import { Wordmark } from "./wordmark";
 
@@ -36,7 +37,10 @@ export function AppSidebar() {
         ))}
       </nav>
 
-      <SidebarWallet />
+      <div className="flex flex-col gap-2">
+        <OperatorAccess />
+        <SidebarWallet />
+      </div>
 
       <div className="mt-3 border-t border-line/70 pt-3">
         <Link

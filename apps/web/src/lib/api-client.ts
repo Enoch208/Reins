@@ -19,6 +19,7 @@ import {
   isOverviewView,
   isWalletView,
 } from "@reins/core";
+import { readOperatorKey } from "./operator-key";
 
 const apiBase = "/api";
 
@@ -37,9 +38,14 @@ export class ApiRequestError extends Error {
 async function send(path: string, init: RequestInit): Promise<unknown> {
   let response: Response;
   try {
+    const operatorKey = readOperatorKey();
     response = await fetch(`${apiBase}${path}`, {
       ...init,
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...(operatorKey === null ? {} : { Authorization: `Bearer ${operatorKey}` }),
+      },
     });
   } catch (cause) {
     if (init.signal?.aborted) throw cause;
@@ -49,6 +55,13 @@ async function send(path: string, init: RequestInit): Promise<unknown> {
   const isJson = response.headers.get("content-type")?.includes("application/json") ?? false;
   const body: unknown = isJson && text.length > 0 ? parseJson(text, response.status) : null;
   if (!response.ok) {
+    if (isApiError(body) && body.error === "OPERATOR_KEY_REQUIRED") {
+      throw new ApiRequestError(
+        response.status,
+        body.error,
+        "This console is view only. Add the operator key under Operator access to make changes.",
+      );
+    }
     if (isApiError(body)) throw new ApiRequestError(response.status, body.error, body.message);
     if (response.status >= 502 && response.status <= 504) {
       throw new ApiRequestError(
