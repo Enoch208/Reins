@@ -3,6 +3,7 @@ import { z } from "zod";
 const envSchema = z.object({
   REINS_API_URL: z.url(),
   PAID_SERVICE_URL: z.url().optional(),
+  REINS_OPERATOR_KEY: z.string().min(32).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

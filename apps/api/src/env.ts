@@ -6,6 +6,17 @@ const envSchema = z.object({
   ONCHAINOS_BIN: z.string().min(1).default("onchainos"),
   XLAYER_RPC_URL: z.url().default("https://rpc.xlayer.tech"),
   PAYMENT_TIMEOUT_MS: z.coerce.number().int().positive().default(30_000),
+  OPERATOR_KEY: z.string().min(32).optional(),
+  ALLOWED_SERVICE_ORIGINS: z
+    .string()
+    .transform((value) =>
+      value
+        .split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.url().transform((url) => new URL(url).origin)).min(1))
+    .optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

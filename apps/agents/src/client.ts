@@ -70,9 +70,11 @@ async function readBody(response: Response): Promise<unknown> {
 
 export class ReinsClient {
   private readonly baseUrl: string;
+  private readonly operatorKey: string | null;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, operatorKey: string | null) {
     this.baseUrl = baseUrl;
+    this.operatorKey = operatorKey;
   }
 
   listJobs(): Promise<readonly JobView[]> {
@@ -145,10 +147,11 @@ export class ReinsClient {
     body: object | null,
     guard: Guard<T>,
   ): Promise<T> {
+    const headers: Record<string, string> = {};
+    if (body !== null) headers["content-type"] = "application/json";
+    if (this.operatorKey !== null) headers.authorization = `Bearer ${this.operatorKey}`;
     const init: RequestInit =
-      body === null
-        ? { method }
-        : { method, headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
+      body === null ? { method, headers } : { method, headers, body: JSON.stringify(body) };
     const response = await fetch(new URL(path, this.baseUrl), init);
     const payload = await readBody(response);
     if (!response.ok) {
