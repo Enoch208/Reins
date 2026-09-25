@@ -83,7 +83,11 @@ pnpm --filter @reins/paid-service dev
 PAID_SERVICE_URL=http://localhost:4021 pnpm --filter @reins/agents dev -- purchase
 ```
 
+## Running it in public
+
+Set `OPERATOR_KEY` (at least 32 characters) and `ALLOWED_SERVICE_ORIGINS` (a comma-separated list of paid service origins) in `apps/api/.env`. With both set, every change — creating jobs, spending, revoking, buying — needs the key as a Bearer token, while the dashboard and evidence stay readable, and Reins will only ever pay the services on the list. The console asks for the key once under **Operator access** and keeps it in that browser; the agent runner reads `REINS_OPERATOR_KEY`. Without them the API prints a warning and must stay on a trusted machine.
+
 ## Known limits
 
-- The API has no operator authentication yet, and the purchase route accepts any x402 URL. Run it on a trusted machine only; do not expose it to the internet until authentication and a service allow-list are in place.
 - Payments use X Layer mainnet and USDT0 only.
+- One operator key per deployment; there are no per-user roles.
