@@ -36,8 +36,8 @@ const app = await createApp({
   ]),
 );
 
-serve({ fetch: app.fetch, port: env.port }, (info) => {
+serve({ fetch: app.fetch, port: env.port, hostname: env.host }, (info) => {
   process.stdout.write(
-    `${operatorLabel} listening on http://localhost:${String(info.port)} (${env.pricing.network}, ${env.pricing.price} USDT0 to ${env.pricing.payTo})\n`,
+    `${operatorLabel} listening on http://${env.host}:${String(info.port)} (${env.pricing.network}, ${env.pricing.price} USDT0 to ${env.pricing.payTo})\n`,
   );
 });

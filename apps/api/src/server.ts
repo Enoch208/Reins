@@ -18,6 +18,6 @@ if (env.OPERATOR_KEY === undefined || env.ALLOWED_SERVICE_ORIGINS === undefined)
 }
 startReconcileLoop(db, payments.chain);
 
-serve({ fetch: app.fetch, port: env.PORT }, (info) => {
-  process.stdout.write(`Reins API listening on http://localhost:${String(info.port)}\n`);
+serve({ fetch: app.fetch, port: env.PORT, hostname: env.HOST }, (info) => {
+  process.stdout.write(`Reins API listening on http://${env.HOST}:${String(info.port)}\n`);
 });

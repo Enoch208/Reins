@@ -16,6 +16,7 @@ const envSchema = z.object({
     .default("0x10eb4e5303af6bc785dbea34052298fa9f652d87"),
   NETWORK: z.enum(supportedNetworks).default("eip155:196"),
   PORT: z.coerce.number().int().positive().default(4021),
+  HOST: z.string().min(1).default("127.0.0.1"),
   PRICE: z
     .string()
     .regex(/^\d+(\.\d{1,6})?$/, "must be a decimal USDT0 amount with at most 6 decimals")
@@ -39,6 +40,7 @@ export interface Pricing {
 
 export interface Env {
   readonly port: number;
+  readonly host: string;
   readonly credentials: FacilitatorCredentials;
   readonly pricing: Pricing;
 }
@@ -61,6 +63,7 @@ export function loadEnv(source: NodeJS.ProcessEnv): EnvResult {
     ok: true,
     env: {
       port: values.PORT,
+      host: values.HOST,
       credentials: {
         apiKey: values.OKX_API_KEY,
         secretKey: values.OKX_SECRET_KEY,
