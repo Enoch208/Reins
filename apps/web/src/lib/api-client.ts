@@ -57,10 +57,12 @@ async function send(path: string, init: RequestInit): Promise<unknown> {
         "The Reins API could not be reached.",
       );
     }
+  }
+  if (!response.ok || !isJson) {
     throw new ApiRequestError(
       response.status,
-      "HTTP_ERROR",
-      `The Reins API answered ${String(response.status)} ${response.statusText}.`,
+      "NOT_CONNECTED",
+      "No Reins API is connected to this site. The console runs against an operator's own Reins API.",
     );
   }
   return body;
